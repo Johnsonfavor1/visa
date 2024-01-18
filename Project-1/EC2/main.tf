@@ -4,7 +4,7 @@ resource "aws_instance" "web" {
 
 
   tags = {
-    Name = "Favor"
+    Name = "dev"
   }
 }
 
@@ -13,3 +13,28 @@ data "aws_ami" "grace" {
 }
 
 
+resource "aws_security_group" "allow_tls" {
+  name        = "allow_tls"
+  description = "Allow TLS and HTTP inbound traffic"
+
+  ingress {
+    description = "TLS from VPC"
+    from_port   = var.tls_from_port
+    to_port     = var.tls_to_port
+    protocol    = "tcp"
+    cidr_blocks = var.tls_cidr_block
+  }
+
+  ingress {
+    description = "HTTP from VPC"
+    from_port   = var.http_from_port
+    to_port     = var.http_to_port
+    protocol    = "tcp"
+    cidr_blocks = var.tls_cidr_block
+  }
+
+
+  tags = {
+    Name = "manual"
+  }
+}
